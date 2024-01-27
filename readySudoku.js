@@ -1,5 +1,13 @@
-function solve(puzzle) {
-  const taskArr = puzzle.split('');
+//* Данный файл был создан для того чтобы проверить отработку всех функций в отдельном файле.
+//! Но проблема была устранена и данный файл стал не нужным.
+
+let boardString = '1-58-2----9--764-52--4--819-19--73-6762-83-9-----61-5---76---3-43--2-5-16--3-89--';
+let board = '';
+
+console.log(`Решаем судоку ${boardString}:`);
+
+function solve(boardString) {
+  const taskArr = boardString.split('');
   const sudokuArr = [];
 
   // резделение массива судоку (taskArr) на массивы строчек
@@ -7,8 +15,7 @@ function solve(puzzle) {
     sudokuArr.push(taskArr.splice(0, 9));
   }
 
-  // Функция проверки (проверка необходима для функции solveSudoku, которая решает судоку)
-  // Переменные "row, col, num" объявляются в функции solveSudoku
+  // функция проверки
   function isValidMove(row, col, num) {
     // Проверка строки
     if (sudokuArr[row].includes(num)) return false;
@@ -51,8 +58,13 @@ function solve(puzzle) {
   }
 
   solveSudoku();
-  return getStringFromArr(sudokuArr);
+  board = getStringFromArr(sudokuArr);
+  return board;
 }
+solve(boardString);
+
+//? проверка функции solve(boardString)
+// console.log(solve(boardString));
 
 //! функция преобразования массива строчек судоку (arrStr) в строчку
 function getStringFromArr(arrStr) {
@@ -67,44 +79,50 @@ function getStringFromArr(arrStr) {
 * Принимает игровое поле в том формате, в котором его вернули из функции solve.
 * Возвращает булевое значение — решено это игровое поле или нет.
 */
-function isSolved(solvedPuzzle) {
-  const arrStr = getArrString(solvedPuzzle);
+function isSolved(board) {
+  const arrStr = getArrString(board);
   const arrCol = getArrColumn(arrStr);
   const arrCoub = getArrCoubs(arrStr);
 
   const regex = /\d{81}/;
-  if (!regex.test(solvedPuzzle)) {
+  // Заменить boardString на переменную решения
+  if (!regex.test(board)) {
     return false;
+  } else {
+    const check = ['1', '2', '3', '4', '5', '6', '7', '8', '9',];
+    const checkStr = structuredClone(arrStr);
+    const checkCol = structuredClone(arrCol);
+    const checkCoub = structuredClone(arrCoub);
+
+    const sortedCheckStr = checkStr.map((e) => e.sort( function (a, b) {
+      return a-b;
+    }));
+
+    const sortedCheckCol = checkCol.map((e) => e.sort( function (a, b) {
+      return a-b
+    }));
+
+    const sortedCheckCoub = checkCoub.map((e) => e.sort( function (a, b) {
+      return a-b;
+    }));
+
+    if (sortedCheckStr.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else if (sortedCheckCol.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else if (sortedCheckCoub.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else return false;
   }
-  const check = ['1', '2', '3', '4', '5', '6', '7', '8', '9',];
-  const checkStr = structuredClone(arrStr);
-  const checkCol = structuredClone(arrCol);
-  const checkCoub = structuredClone(arrCoub);
-
-  const sortedCheckStr = checkStr.map((e) => e.sort(function (a, b) {
-    return a-b;
-  }));
-
-  const sortedCheckCol = checkCol.map((e) => e.sort(function (a, b) {
-    return a-b
-  }));
-
-  const sortedCheckCoub = checkCoub.map((e) => e.sort(function (a, b) {
-    return a-b;
-  }));
-
-  if (sortedCheckStr.filter((e) => e.toString() === check.toString()).length == 9) return true
-  else if (sortedCheckCol.filter((e) => e.toString() === check.toString()).length == 9) return true
-  else if (sortedCheckCoub.filter((e) => e.toString() === check.toString()).length == 9) return true
-  else return false;
 }
+isSolved(board);
 
-//! функция преобразования solvedPuzzle в массив строчек судоку (arrStr)
-function getArrString(solvedPuzzle) {
+//? Проверка функции isSolved(board)
+console.log(isSolved(board));
+
+//! функция преобразования boardString в массив строчек судоку (arrStr)
+function getArrString(board) {
   const strArr = [];
   let n = 0;
   for (let i = 0; i < 9; i++) {
-    strArr.push(solvedPuzzle.trim().slice(n, n + 9).split(''));
+    strArr.push(board.trim().slice(n, n + 9).split(''));
     n += 9;
   }
   return strArr;
@@ -141,24 +159,29 @@ function getArrCoubs(arrStr) {
   return squaresArr;
 }
 
+
 /**
 * Принимает игровое поле в том формате, в котором его вернули из функции solve.
 * Возвращает строку с игровым полем для последующего вывода в консоль.
 * Подумай, как симпатичнее сформировать эту строку.
 */
-function prettyBoard(solvedPuzzle) {
-  const arr = solvedPuzzle.split('');
+function prettyBoard(board) {
+  const arr = board.split(''); //изменить переменную строки
   const newArr = arr.map((e) => e += ' ');
-  for (let i = 8; i < newArr.length; i += 9) {
+  for (let i = 8; i< newArr.length; i+=9) {
     newArr[i] += '\n';
   }
   const fullBoard = newArr.join('');
   return fullBoard;
 }
 
+
+//? Проверка функции prettyBoard(board)
+console.log(prettyBoard(board));
+  
 // Экспортировать функции для использования в другом файле (например, readAndSolve.js).
-module.exports = {
-  solve,
-  isSolved,
-  prettyBoard,
-};
+// module.exports = {
+//     solve,
+//     isSolved,
+//     prettyBoard,
+// };
