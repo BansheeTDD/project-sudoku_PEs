@@ -4,6 +4,8 @@
  * Договорись со своей командой, в каком формате возвращать этот результат.
  */
 function solve(boardString) {
+  const arr = string.slice('')
+  console.log (arr)
 }
 
 /**
@@ -20,7 +22,13 @@ function isSolved(board) {
  * Подумай, как симпатичнее сформировать эту строку.
  */
 function prettyBoard(board) {
-
+  const arr = string.split(''); //изменить переменную строки
+  const newArr = arr.map((e) => e += ' ')
+  for (let i = 8; i< newArr.length; i+=9) {
+      newArr[i] += '\n'
+  }
+  const fullBoard = newArr.join('')
+  return fullBoard
 }
 
 // Экспортировать функции для использования в другом файле (например, readAndSolve.js).
