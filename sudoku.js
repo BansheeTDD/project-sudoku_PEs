@@ -4,6 +4,55 @@
  * Договорись со своей командой, в каком формате возвращать этот результат.
  */
 function solve(boardString) {
+  const arrStr = getArrString(boardString);
+  const arrCol = getArrColumn(arrStr);
+  const arrCoub = getArrCoubs(arrStr);
+
+  // console.log({ arrStr, arrCol, arrCoub });
+  console.log(arrCoub);
+
+}
+
+//! функция преобразования boardString в массив строчек судоку (arrStr)
+function getArrString(boardString) {
+  const strArr = [];
+  let n = 0;
+  for (let i = 0; i < 9; i++) {
+    strArr.push(boardString.trim().slice(n, n + 9).split(''));
+    n += 9;
+  }
+  return strArr;
+}
+
+//! функция преобразования массива строчек судоку (arrStr) в массив колонок судоку (arrCol)
+function getArrColumn(arrStr) {
+  const columnArr = [];
+  for (let i = 0; i < 9; i++) {
+    let arrColNaN = [];
+    for (let j = 0; j < 9; j++) {
+      arrColNaN.push(arrStr[j][i]);
+    }
+    columnArr.push(arrColNaN);
+    arrColNaN = [];
+  }
+  return columnArr;
+}
+
+//! функция преобразования массива строчек судоку (arrStr) в массив квадратов судоку (arrCoub)
+function getArrCoubs(arrStr) {
+  const squaresArr = [];
+  for (let i = 0; i < 9; i += 3) {
+    for (let j = 0; j < 9; j += 3) {
+      let square = [];
+      for (let r = i; r < i + 3; r += 1) {
+        for (let c = j; c < j + 3; c += 1) {
+          square.push(arrStr[r][c]);
+        }
+      }
+      squaresArr.push(square);
+    }
+  }
+  return squaresArr;
 }
 
 /**
