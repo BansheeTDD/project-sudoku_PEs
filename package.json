@@ -4,7 +4,8 @@
   "description": "## Введение",
   "main": "runner.js",
   "scripts": {
-    "start": "node runner.js"
+    "start": "node runner.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,8 @@
     "eslint": "^8.8.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4"
+  },
+  "dependencies": {
+    "jest": "^29.7.0"
   }
 }

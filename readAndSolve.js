@@ -9,9 +9,7 @@ function readAndSolve(error, fileData) {
   }
 
   // Разбить содержимое файла построчно и отфильтровать все пустые строки.
-  const puzzles = fileData
-    .split('\n')
-    .filter((line) => line !== '');
+  const puzzles = fileData.split('\n').filter((line) => line !== '');
 
   // Получить номер судоку из process.argv, либо взять 1-й судоку по умолчанию.
   let puzzleNumber = Number(process.argv[2]) || 1;
