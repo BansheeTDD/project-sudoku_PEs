@@ -3,15 +3,69 @@
  * Возвращает игровое поле после попытки его решить.
  * Договорись со своей командой, в каком формате возвращать этот результат.
  */
+// let boardString = '-96-4---11---6---45-481-39---795--43-3--8----4-5-23-18-1-63--59-59-7-83---359---7';
+
 function solve(boardString) {
-  const arrStr = getArrString(boardString);
-  const arrCol = getArrColumn(arrStr);
-  const arrCoub = getArrCoubs(arrStr);
+  // const arrStr = getArrString(boardString);
+  // const arrCol = getArrColumn(arrStr);
+  // const arrCoub = getArrCoubs(arrStr);
+  const taskArr = boardString.split('');
+  const sudokuArr = [];
 
+  // резделение массива судоку (taskArr) на массивы строчек
+  for (let i = 0; i < 9; i += 1) {
+    sudokuArr.push(taskArr.splice(0, 9));
+  }
+
+  // функция проверки
+  function isValidMove(row, col, num) {
+    // Проверка строки
+    if (sudokuArr[row].includes(num)) return false;
+
+    // Проверка колонки
+    if (sudokuArr.some(rowArr => rowArr[col] === num)) return false;
+
+    // Проверка квадрата 3x3
+    const squareRow = Math.floor(row / 3) * 3;
+    const squareCol = Math.floor(col / 3) * 3;
+
+    for (let r = 0; r < 3; r += 1) {
+      for (let c = 0; c < 3; c += 1) {
+        if (sudokuArr[squareRow + r][squareCol + c] === num) return false;
+      }
+    }
+    return true;
+  }
+
+  // Рекурсивная функция решения судоку
+  function solveSudoku() {
+    for (let row = 0; row < 9; row += 1) {
+      for (let col = 0; col < 9; col += 1) {
+        if (sudokuArr[row][col] === '-') {
+          for (let num = 1; num <= 9; num += 1) {
+            const numStr = num.toString();
+            if (isValidMove(row, col, numStr)) {
+              sudokuArr[row][col] = numStr;
+              if (solveSudoku()) {
+                return true;
+              }
+              sudokuArr[row][col] = '-';
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  solveSudoku();
+  return sudokuArr;
+  
   // console.log({ arrStr, arrCol, arrCoub });
-  console.log(arrCoub);
-
+  // return getStringFromArr(arrStr);
 }
+// console.log(solve(boardString));
 
 //! функция преобразования boardString в массив строчек судоку (arrStr)
 function getArrString(boardString) {
@@ -55,6 +109,16 @@ function getArrCoubs(arrStr) {
   return squaresArr;
 }
 
+//! функция преобразования массива строчек судоку (arrStr) в строчку
+function getStringFromArr(arrStr) {
+  const string = [];
+  for (let i = 0; i < arrStr.length; i++) {
+    string.push(arrStr[i].join(''));
+  }
+  return string.join('');
+}
+
+// console.log(solve(boardString));
 /**
  * Принимает игровое поле в том формате, в котором его вернули из функции solve.
  * Возвращает булевое значение — решено это игровое поле или нет.
@@ -69,7 +133,13 @@ function isSolved(board) {
  * Подумай, как симпатичнее сформировать эту строку.
  */
 function prettyBoard(board) {
-
+  const arr = board.split(''); //изменить переменную строки
+  const newArr = arr.map((e) => e += ' ');
+  for (let i = 8; i< newArr.length; i+=9) {
+      newArr[i] += '\n';
+  }
+  const fullBoard = newArr.join('');
+  return fullBoard;
 }
 
 // Экспортировать функции для использования в другом файле (например, readAndSolve.js).
