@@ -3,8 +3,8 @@
  * Возвращает игровое поле после попытки его решить.
  * Договорись со своей командой, в каком формате возвращать этот результат.
  */
-// let boardString = '-96-4---11---6---45-481-39---795--43-3--8----4-5-23-18-1-63--59-59-7-83---359---7';
-
+// let boardString = '1-58-2----9--764-52--4--819-19--73-6762-83-9-----61-5---76---3-43--2-5-16--3-89--';
+// let board = '';
 function solve(boardString) {
   // const arrStr = getArrString(boardString);
   // const arrCol = getArrColumn(arrStr);
@@ -60,22 +60,66 @@ function solve(boardString) {
   }
 
   solveSudoku();
-  return sudokuArr;
+  // return sudokuArr; 
+  // board = getStringFromArr(sudokuArr);
+  return console.log(sudokuArr.join(''));
   
   // console.log({ arrStr, arrCol, arrCoub });
   // return getStringFromArr(arrStr);
 }
+
 // console.log(solve(boardString));
 
 //! функция преобразования boardString в массив строчек судоку (arrStr)
-function getArrString(boardString) {
-  const strArr = [];
-  let n = 0;
-  for (let i = 0; i < 9; i++) {
-    strArr.push(boardString.trim().slice(n, n + 9).split(''));
-    n += 9;
+// function getArrString(board) {
+//   const strArr = [];
+//   let n = 0;
+//   for (let i = 0; i < 9; i++) {
+//     strArr.push(board.trim().slice(n, n + 9).split(''));
+//     n += 9;
+//   }
+//   return strArr;
+// }
+
+
+/**
+ * Принимает игровое поле в том формате, в котором его вернули из функции solve.
+ * Возвращает булевое значение — решено это игровое поле или нет.
+ */
+function isSolved(board) {
+  console.log(board);
+  const arrStr = getArrString(board);
+  // console.log(arrStr);
+  const arrCol = getArrColumn(arrStr);
+  const arrCoub = getArrCoubs(arrStr);
+  
+  const regex = /\d{81}/;
+  // Заменить boardString на переменную решения
+  if (!regex.test(board)) {
+    return false;
+  } else {
+    const check = ['1', '2', '3', '4', '5', '6', '7', '8', '9',];
+    const checkStr = structuredClone(arrStr);
+    const checkCol = structuredClone(arrCol);
+    const checkCoub = structuredClone(arrCoub);
+    
+    const sortedCheckStr = checkStr.map((e) => e.sort( function (a, b) {
+      return a-b;
+    }));
+    
+    const sortedCheckCol = checkCol.map((e) => e.sort( function (a, b) {
+      return a-b
+    }));
+    
+    const sortedCheckCoub = checkCoub.map((e) => e.sort( function (a, b) {
+      return a-b;
+    }));
+    
+    if (sortedCheckStr.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else if (sortedCheckCol.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else if (sortedCheckCoub.filter((e) => e.toString() === check.toString()).length == 9) return true
+    else return false;
   }
-  return strArr;
 }
 
 //! функция преобразования массива строчек судоку (arrStr) в массив колонок судоку (arrCol)
@@ -117,15 +161,7 @@ function getStringFromArr(arrStr) {
   }
   return string.join('');
 }
-
-// console.log(solve(boardString));
-/**
- * Принимает игровое поле в том формате, в котором его вернули из функции solve.
- * Возвращает булевое значение — решено это игровое поле или нет.
- */
-function isSolved(board) {
-
-}
+// console.log(isSolved(board));
 
 /**
  * Принимает игровое поле в том формате, в котором его вернули из функции solve.
